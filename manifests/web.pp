@@ -23,11 +23,11 @@ exec{ "musicjungle":
 	require => Service["mysql"]	
 }
 
-exec{"musicjungle":
-	command => "mysql -uroot -e "GRANT ALL PRIVILEGES ON * TO 'musicjungle'@'%' IDENTIFIED BY '1234';" musicjungle",
-	unless => "mysql -umusicjungle -p1234 musicjungle",
-	path => "/usr/bin",
-	require => Service["mysql"]
+exec { "mysql-password" :
+    command => "mysql -uroot -e \"GRANT ALL PRIVILEGES ON * TO 'musicjungle'@'%' IDENTIFIED BY 'minha-senha';\" musicjungle",
+    unless  => "mysql -umusicjungle -pminha-senha musicjungle",
+    path => "/usr/bin",
+    require => Exec["musicjungle"]
 }
 
 service{ "tomcat7":
